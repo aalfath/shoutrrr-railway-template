@@ -5,4 +5,4 @@
 # A failure stops the container (non-zero exit).
 set -e
 echo "[railway] checking the instance owner"
-php /usr/local/share/railway/bootstrap-owner.php
+php /etc/entrypoint.d/lib/railway-bootstrap-owner.php

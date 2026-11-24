@@ -9,7 +9,7 @@ COPY --chmod=755 railway/supervisor-fatal.sh /usr/local/bin/supervisor-fatal
 COPY --chmod=755 railway/ffmpeg.sh /usr/local/bin/ffmpeg
 COPY --chmod=644 railway/supervisord.conf /etc/supervisor/railway.conf
 COPY --chmod=755 railway/60-railway-owner.sh /etc/entrypoint.d/60-railway-owner.sh
-COPY --chmod=644 railway/bootstrap-owner.php /usr/local/share/railway/bootstrap-owner.php
+COPY --chmod=644 railway/bootstrap-owner.php /etc/entrypoint.d/lib/railway-bootstrap-owner.php
 
 # Fixed settings for a single-container install behind Railway's HTTPS proxy.
 # Everything lives on the one Railway volume mounted at /var/www/html/storage
