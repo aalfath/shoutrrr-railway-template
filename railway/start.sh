@@ -27,11 +27,14 @@ export GOMAXPROCS="${GOMAXPROCS:-$cpus}"
 export SHOUTRRR_FFMPEG_THREADS="${SHOUTRRR_FFMPEG_THREADS:-$cpus}"
 
 # Octane (FrankenPHP) workers: "auto" means 2 per host CPU (64 on Railway), so
-# size them from the service's own CPU and memory limits instead.
+# size them from the service's own CPU and memory limits instead (at most 4;
+# set OCTANE_WORKERS to override).
 if [ -z "${OCTANE_WORKERS:-}" ]; then
     w=$(( cpus * 2 ))
     by_mem=$(( (mem_mb - 250) / 100 ))
     [ "$by_mem" -lt "$w" ] && w=$by_mem
+    # A social scheduler needs few request workers; more only cost RAM.
+    [ "$w" -gt 4 ] && w=4
     [ "$w" -lt 1 ] && w=1
     export OCTANE_WORKERS=$w
 fi
