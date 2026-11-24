@@ -88,9 +88,11 @@ on_term() {
 }
 trap on_term TERM INT
 
+# supervisord and its programs reopen /dev/fd/1 and /dev/fd/2, which fails on
+# root-owned pipes after dropping privileges, so give them pipes made by www-data.
 setpriv --reuid=www-data --regid=www-data --init-groups \
     env HOME=/var/www \
-    docker-php-serversideup-entrypoint supervisord -c /etc/supervisor/railway.conf &
+    bash -c 'exec 1> >(cat) 2> >(cat >&2); exec docker-php-serversideup-entrypoint supervisord -c /etc/supervisor/railway.conf' &
 child=$!
 
 set +e
